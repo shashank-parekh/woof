@@ -14,13 +14,19 @@ class FeedProducer(object):
     use send() to send to any topic
     """
 
-    def __init__(self, broker, retries=3, async=False, **kwargs):
+    def __init__(self,
+                 broker,
+                 key_serializer=make_kafka_safe,
+                 value_serializer=make_kafka_safe,
+                 retries=3,
+                 async=False,
+                 **kwargs):
         try:
             kwargs['api_version'] = kwargs.get('api_version',
                                                CURRENT_PROD_BROKER_VERSION)
             self.prod = KafkaProducer(bootstrap_servers=broker,
-                                      key_serializer=make_kafka_safe,
-                                      value_serializer=make_kafka_safe,
+                                      key_serializer=key_serializer,
+                                      value_serializer=value_serializer,
                                       retries=retries,
                                       **kwargs)
             self.async = async

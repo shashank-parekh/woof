@@ -28,6 +28,8 @@ class PartitionedProducer(object):
                  batch_send_every_n=BATCH_SEND_MSG_COUNT,
                  batch_send_every_t=BATCH_SEND_DEFAULT_INTERVAL,  # unused  - here for legacy support
                  retries=3,
+                 key_serializer=make_kafka_safe,
+                 value_serializer=make_kafka_safe,
                  **kwargs):
 
         try:
@@ -39,8 +41,8 @@ class PartitionedProducer(object):
             kwargs['api_version'] = kwargs.get('api_version',
                                                CURRENT_PROD_BROKER_VERSION)
             self.prod = KafkaProducer(bootstrap_servers=broker,
-                                      key_serializer=make_kafka_safe,
-                                      value_serializer=make_kafka_safe,
+                                      key_serializer=key_serializer,
+                                      value_serializer=value_serializer,
                                       batch_size=batch_send_every_n,
                                       retries=retries,
                                       partitioner=_partitioner,
@@ -106,7 +108,13 @@ class CyclicPartitionedProducer(KafkaProducer):
     use send() to send to any topic and distribute keys cyclically in partitions
     """
 
-    def __init__(self, broker, async=True, random_start=True, **kwargs):
+    def __init__(self,
+                 broker,
+                 async=True,
+                 key_serializer=make_kafka_safe,
+                 value_serializer=make_kafka_safe,
+                 random_start=True,
+                 **kwargs):
         self.partition_cycles = {}
         self.random_start = random_start
         self.async = async
@@ -114,8 +122,8 @@ class CyclicPartitionedProducer(KafkaProducer):
                                            CURRENT_PROD_BROKER_VERSION)
         super(CyclicPartitionedProducer, self).__init__(
             bootstrap_servers=broker,
-            key_serializer=make_kafka_safe,
-            value_serializer=make_kafka_safe,
+            key_serializer=key_serializer,
+            value_serializer=value_serializer,
             **kwargs)
 
     def _partition(self, topic, partition, key, value, serialized_key,

@@ -16,6 +16,8 @@ class TransactionLogger(object):
                  host=socket.gethostname(),
                  async=False,
                  retries=1,
+                 key_serializer=make_kafka_safe,
+                 value_serializer=make_kafka_safe,
                  **kwargs):
         self.broker = broker
         self.this_host = host
@@ -27,8 +29,8 @@ class TransactionLogger(object):
         # thread safe producer, uses default murmur2 partiioner by default
         # good for us
         self.producer = KafkaProducer(bootstrap_servers=broker,
-                                      key_serializer=make_kafka_safe,
-                                      value_serializer=make_kafka_safe,
+                                      key_serializer=key_serializer,
+                                      value_serializer=value_serializer,
                                       retries=retries,
                                       **kwargs)
 
