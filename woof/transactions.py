@@ -9,6 +9,19 @@ from common import CURRENT_PROD_BROKER_VERSION
 log = logging.getLogger("woof")
 
 
+def make_kafka_safe(raw_data):
+    """
+    This function was written to avoid non-unicode
+    string data produced to Kafka
+    """
+    if type(raw_data) != unicode:
+        raw_data = str(raw_data)
+        raw_data = raw_data.decode('utf-8')
+        return raw_data.encode('ascii', 'ignore')
+    else:
+        return raw_data.encode('ascii', 'ignore')
+
+
 class TransactionLogger(object):
     def __init__(self,
                  broker,
@@ -16,6 +29,8 @@ class TransactionLogger(object):
                  host=socket.gethostname(),
                  async=False,
                  retries=1,
+                 key_serializer=make_kafka_safe,
+                 value_serializer=make_kafka_safe,
                  **kwargs):
         self.broker = broker
         self.this_host = host
@@ -27,8 +42,8 @@ class TransactionLogger(object):
         # thread safe producer, uses default murmur2 partiioner by default
         # good for us
         self.producer = KafkaProducer(bootstrap_servers=broker,
-                                      key_serializer=make_kafka_safe,
-                                      value_serializer=make_kafka_safe,
+                                      key_serializer=key_serializer,
+                                      value_serializer=value_serializer,
                                       retries=retries,
                                       **kwargs)
 
@@ -135,12 +150,3 @@ class TransactionLogger(object):
 
 def _get_topic_from_vertical(vertical):
     return "_".join(["TRANSACTIONS", vertical])
-
-
-def make_kafka_safe(raw_data):
-    if type(raw_data) != unicode:
-        raw_data = str(raw_data)
-        raw_data = raw_data.decode('utf-8')
-        return raw_data.encode('ascii', 'ignore')
-    else:
-        return raw_data.encode('ascii', 'ignore')
