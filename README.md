@@ -31,6 +31,20 @@ msg = "this"
 fp.send(topic, " [MY MESSAGE] %s" %(msg))
 
 ```
+
+**Keyed/Partitioned Producer**
+```python
+import sys
+import os
+import logging
+from woof.partitioned_producer import PartitionedProducer
+
+pp = PartitionedProducer(server)
+msg = "this"
+pp.send(topic = topic_name, value=message_value, key=message_key)
+
+```
+
 **Consumer**
 
 ```python
