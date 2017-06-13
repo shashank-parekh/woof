@@ -40,7 +40,6 @@ import logging
 from woof.partitioned_producer import PartitionedProducer
 
 pp = PartitionedProducer(server)
-msg = "this"
 pp.send(topic = topic_name, value=message_value, key=message_key)
 
 ```
