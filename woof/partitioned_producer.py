@@ -11,6 +11,8 @@ log = logging.getLogger("woof")
 
 BATCH_SEND_DEFAULT_INTERVAL = 20
 BATCH_SEND_MSG_COUNT = 32
+REQUEST_TIMEOUT_MS = 2000
+MAX_BLOCK_MS = 1000
 
 
 class PartitionedProducer(object):
@@ -46,6 +48,8 @@ class PartitionedProducer(object):
                                       batch_size=batch_send_every_n,
                                       retries=retries,
                                       partitioner=_partitioner,
+                                      request_timeout_ms=REQUEST_TIMEOUT_MS,
+                                      max_block_ms=MAX_BLOCK_MS,
                                       **kwargs)
         except Exception as e1:
             log.error("[partitionedproducer log] GEN err %s  \n", str(e1))
@@ -73,7 +77,6 @@ class PartitionedProducer(object):
 
 # Note if the earlier hash is needed, need to explicitly pass dumb_hash
 def dumb_hash(key):
-
     sum = 0
     str_key = str(key)
     for s in str_key:
