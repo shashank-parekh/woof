@@ -1,3 +1,4 @@
+gevent
 kafka-python==1.2.5
 kazoo==2.2.1
 six==1.10.0

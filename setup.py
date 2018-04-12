@@ -28,7 +28,7 @@ setup(
     description="Messaging library ",
     long_description=README,
     keywords="apache kafka",
-    install_requires=['six', 'kafka'],
+    install_requires=['six', 'kafka-python', 'gevent'],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",

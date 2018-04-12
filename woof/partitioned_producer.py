@@ -4,7 +4,7 @@ import random
 from kafka import KafkaProducer
 from kafka.errors import KafkaTimeoutError
 from kafka.partitioner.default import DefaultPartitioner
-from common import CURRENT_PROD_BROKER_VERSION
+from .common import CURRENT_PROD_BROKER_VERSION
 from .transactions import make_kafka_safe
 
 log = logging.getLogger("woof")

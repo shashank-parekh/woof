@@ -70,7 +70,7 @@ class GreenFeedConsumer(FeedConsumer):
                     self.check_for_exit_criteria()
                 self.check_for_exit_criteria()
             except Exception as e:
-                print 'EXCEPTION', e
+                print('EXCEPTION', e)
                 traceback.print_exc(file=sys.stdout)
                 log.error(
                     "[greenconsumer log] thread run  err %s ..continuing../n",

@@ -4,7 +4,7 @@ import time
 
 from kafka import KafkaProducer
 from kafka.errors import KafkaTimeoutError
-from common import CURRENT_PROD_BROKER_VERSION
+from .common import CURRENT_PROD_BROKER_VERSION
 
 log = logging.getLogger("woof")
 
