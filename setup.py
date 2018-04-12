@@ -20,7 +20,8 @@ setup(
     version=__version__,
 
     packages=[
-        "woof"
+        "woof",
+        "kafka"
     ],
 
     author="Jyotiswarup Raiturkar",
@@ -28,7 +29,7 @@ setup(
     description="Messaging library ",
     long_description=README,
     keywords="apache kafka",
-    install_requires=['six', 'kafka'],
+    install_requires=['six'],
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
