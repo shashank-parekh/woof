@@ -14,12 +14,8 @@ def make_kafka_safe(raw_data):
     This function was written to avoid non-unicode
     string data produced to Kafka
     """
-    if type(raw_data) != unicode:
-        raw_data = str(raw_data)
-        raw_data = raw_data.decode('utf-8')
-        return raw_data.encode('ascii', 'ignore')
-    else:
-        return raw_data.encode('ascii', 'ignore')
+    raw_data = str(raw_data)
+    return raw_data.encode('ascii', 'ignore')
 
 
 class TransactionLogger(object):
