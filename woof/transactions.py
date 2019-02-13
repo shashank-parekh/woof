@@ -1,6 +1,7 @@
 import logging
 import socket
 import time
+import sys
 
 from kafka import KafkaProducer
 from kafka.errors import KafkaTimeoutError
@@ -14,6 +15,8 @@ def make_kafka_safe(raw_data):
     This function was written to avoid non-unicode
     string data produced to Kafka
     """
+    if sys.version_info[0] == 3 and isinstance(raw_data, str):
+        return raw_data.encode('utf-8')
     return raw_data
 
 
@@ -134,13 +137,12 @@ class TransactionLogger(object):
         """
         separator = '\t'
 
-        safe_skus = [make_kafka_safe(x) for x in skus]
+        safe_skus = [x for x in skus]
         skus_as_string = ",".join(safe_skus)
 
-        return separator.join([self.this_host, str(time.time(
-        )), verb, make_kafka_safe(txn_id), make_kafka_safe(
-            amount), skus_as_string, make_kafka_safe(detail), make_kafka_safe(
-                userid), make_kafka_safe(email), make_kafka_safe(phone)])
+        return separator.join(
+            [self.this_host, str(time.time()), verb, txn_id, amount, skus_as_string, detail, userid, email, phone]
+        )
 
 
 def _get_topic_from_vertical(vertical):
