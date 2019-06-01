@@ -30,7 +30,7 @@ print server
 print topic, key, msg
 
 t1 = time.time()
-prod_cyclic = CyclicPartitionedProducer(server, async=True)
+prod_cyclic = CyclicPartitionedProducer(server, is_async=True)
 print "Cyclic Async Connect time ", time.time() - t1
 t1 = time.time()
 prod_cyclic.send(topic, key, " [%s] %s" % (str(t1), msg))

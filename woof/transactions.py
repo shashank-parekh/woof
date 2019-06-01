@@ -22,7 +22,7 @@ class TransactionLogger(object):
                  broker,
                  vertical,
                  host=socket.gethostname(),
-                 async=False,
+                 is_async=False,
                  retries=1,
                  key_serializer=make_kafka_safe,
                  value_serializer=make_kafka_safe,
@@ -30,7 +30,7 @@ class TransactionLogger(object):
         self.broker = broker
         self.this_host = host
         self.vertical = vertical
-        self.async = async
+        self.is_async = is_async
         self.topic = _get_topic_from_vertical(vertical)
         kwargs['api_version'] = kwargs.get('api_version',
                                            CURRENT_PROD_BROKER_VERSION)

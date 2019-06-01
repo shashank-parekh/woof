@@ -22,7 +22,7 @@ stime = time.time()
 # Should be a long lived object
 # async would be True for performance, if needed
 # but in fringe cases if there is a restart, msg might not be deliverd
-tr = TransactionLogger(srv, "dummy_vertical1", async=False)
+tr = TransactionLogger(srv, "dummy_vertical1", is_async=False)
 print "Time taken for connection: ", time.time() - stime
 
 

@@ -22,7 +22,7 @@ class PartitionedProducer(object):
 
     def __init__(self, broker,
                  partitioner=None,  # Note if the earlier hash is needed, need to explicitly pass dumb_hash
-                 async=False,
+                 is_async=False,
                  req_acks=None,  # unused  - here for legacy support
                  ack_timeout=None,  # unused  - here for legacy support
                  codec=None,
@@ -35,7 +35,7 @@ class PartitionedProducer(object):
                  **kwargs):
 
         try:
-            self.async = async
+            self.is_async = is_async
             if partitioner is not None:
                 _partitioner = CustomPartitioner(partitioner)
             else:
@@ -61,7 +61,7 @@ class PartitionedProducer(object):
                 self.prod.send(topic, key=key, value=_msg)
 
             # for async flush will happen in background
-            if not self.async:
+            if not self.is_async:
                 self.prod.flush()
 
         except KafkaTimeoutError as e:
@@ -113,14 +113,14 @@ class CyclicPartitionedProducer(KafkaProducer):
 
     def __init__(self,
                  broker,
-                 async=True,
+                 is_async=True,
                  key_serializer=make_kafka_safe,
                  value_serializer=make_kafka_safe,
                  random_start=True,
                  **kwargs):
         self.partition_cycles = {}
         self.random_start = random_start
-        self.async = async
+        self.is_async = is_async
         kwargs['api_version'] = kwargs.get('api_version',
                                            CURRENT_PROD_BROKER_VERSION)
         super(CyclicPartitionedProducer, self).__init__(
@@ -159,7 +159,7 @@ class CyclicPartitionedProducer(KafkaProducer):
                                                             value=_msg)
 
             # for async flush will happen in background
-            if not self.async:
+            if not self.is_async:
                 self.prod.flush()
 
         except KafkaTimeoutError as e:
